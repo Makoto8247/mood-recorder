@@ -5,6 +5,8 @@ import '../services/database_helper.dart';
 import '../models/mood_record.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -12,27 +14,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // 画面遷移後に再描画するためのキー
   final GlobalKey<State> _key = GlobalKey();
+  // グラフの表示期間（日数）
+  static const maxDateRange = 7;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('気分記録')),
+      appBar: AppBar(title: const Text('気分記録')),
       drawer: Drawer(
         child: ListView(
           children: [
             DrawerHeader(
               decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-              child: Text('メニュー',
+              child: const Text('メニュー',
                   style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('トップ'),
+              leading: const Icon(Icons.home),
+              title: const Text('トップ'),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: Icon(Icons.add),
-              title: Text('記録'),
+              leading: const Icon(Icons.add),
+              title: const Text('記録'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/record')
@@ -40,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.list),
-              title: Text('記録一覧'),
+              leading: const Icon(Icons.list),
+              title: const Text('記録一覧'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/record_list')
@@ -49,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('設定'),
+              leading: const Icon(Icons.settings),
+              title: const Text('設定'),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.pushNamed(context, '/settings')
@@ -64,29 +68,25 @@ class _HomeScreenState extends State<HomeScreen> {
         key: _key,
         future: DatabaseHelper.instance.getAllMoodRecords(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
           final records = snapshot.data!;
-          // 表示範囲の計算
-          final now = DateTime.now();
-          final oldestDate = records.isEmpty
-              ? records.first.date // データがある場合は最古のデータから
-              : now.subtract(Duration(days: 7)); // データがない場合は8日前から
 
           return Column(
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.5,
                 child: Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: LineChart(
                     LineChartData(
                       minY: 0,
                       maxY: 100,
                       minX: 0, // 0から始める
-                      maxX: 7, // 7日分 (0-7で8日分)
-                      gridData: FlGridData(
+                      maxX: maxDateRange.toDouble(), // 7日分 (0-7で8日分)
+                      gridData: const FlGridData(
                         show: true,
                         drawVerticalLine: true,
                         horizontalInterval: 20,
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       titlesData: FlTitlesData(
                         show: true,
-                        leftTitles: AxisTitles(
+                        leftTitles: const AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
                             interval: 20,
@@ -108,13 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             interval: 1,
                             getTitlesWidget: (value, meta) {
                               final date = DateTime.now().subtract(
-                                Duration(days: (7 - value).toInt()),
+                                Duration(days: (maxDateRange - value).toInt()),
                               );
                               return Padding(
-                                padding: EdgeInsets.only(top: 5),
+                                padding: const EdgeInsets.only(top: 5),
                                 child: Text(
                                   DateFormat('M/d').format(date),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -123,10 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                         ),
-                        rightTitles: AxisTitles(
+                        rightTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
                         ),
-                        topTitles: AxisTitles(
+                        topTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
                         ),
                       ),
@@ -140,14 +140,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             final daysAgo =
                                 DateTime.now().difference(record.date).inDays;
                             return FlSpot(
-                              7 - daysAgo.toDouble(), // 7から引くことで右から左へ
+                              maxDateRange -
+                                  daysAgo.toDouble(), // 7から引くことで右から左へ
                               record.mood.toDouble(),
                             );
                           }).toList(),
                           isCurved: true,
                           color: Theme.of(context).primaryColor,
                           barWidth: 3,
-                          dotData: FlDotData(show: true),
+                          dotData: const FlDotData(show: true),
                         ),
                       ],
                     ),
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.pushNamed(context, '/record')
             .then((_) => setState(() {})),
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

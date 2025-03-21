@@ -3,6 +3,8 @@ import '../models/mood_record.dart';
 import '../services/database_helper.dart';
 
 class EditRecordScreen extends StatefulWidget {
+  const EditRecordScreen({super.key});
+
   @override
   _EditRecordScreenState createState() => _EditRecordScreenState();
 }
@@ -47,10 +49,10 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('記録を編集'),
+        title: const Text('記録を編集'),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
+            icon: const Icon(Icons.delete),
             onPressed: _confirmDelete,
           ),
         ],
@@ -58,25 +60,26 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
       body: FutureBuilder<List<String>>(
         future: DatabaseHelper.instance.getCategories(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
           return SingleChildScrollView(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 ListTile(
                   title: Text(
                       '日付: ${_selectedDate.year}/${_selectedDate.month}/${_selectedDate.day}'),
-                  trailing: Icon(Icons.calendar_today),
+                  trailing: const Icon(Icons.calendar_today),
                   onTap: _selectDate,
                 ),
                 ListTile(
                   title: Text('時刻: ${_selectedTime.format(context)}'),
-                  trailing: Icon(Icons.access_time),
+                  trailing: const Icon(Icons.access_time),
                   onTap: _selectTime,
                 ),
-                Text('気分: ${_mood}点', style: TextStyle(fontSize: 18)),
+                Text('気分: $_mood点', style: const TextStyle(fontSize: 18)),
                 Slider(
                   value: _mood.toDouble(),
                   min: 0,
@@ -86,7 +89,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 ),
                 DropdownButtonFormField<String>(
                   value: _selectedCategory,
-                  hint: Text('カテゴリを選択'),
+                  hint: const Text('カテゴリを選択'),
                   items: snapshot.data!.map((category) {
                     return DropdownMenuItem(
                         value: category, child: Text(category));
@@ -94,19 +97,19 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                   onChanged: (value) =>
                       setState(() => _selectedCategory = value),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _diaryController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'ひとこと（任意）',
                     border: OutlineInputBorder(),
                   ),
                   maxLines: 3,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: _updateRecord,
-                  child: Text('更新'),
+                  child: const Text('更新'),
                 ),
               ],
             ),
@@ -174,15 +177,15 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('確認'),
-        content: Text('この記録を削除してもよろしいですか？'),
+        title: const Text('確認'),
+        content: const Text('この記録を削除してもよろしいですか？'),
         actions: [
           TextButton(
-            child: Text('キャンセル'),
+            child: const Text('キャンセル'),
             onPressed: () => Navigator.pop(context, false),
           ),
           TextButton(
-            child: Text('削除'),
+            child: const Text('削除'),
             onPressed: () => Navigator.pop(context, true),
           ),
         ],

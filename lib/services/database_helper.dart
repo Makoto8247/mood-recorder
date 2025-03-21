@@ -58,7 +58,7 @@ class DatabaseHelper {
   // 気分記録の取得（最新8日分、1日1記録）
   Future<List<MoodRecord>> getAllMoodRecords() async {
     final db = await database;
-    final date = DateTime.now().subtract(Duration(days: 7)); // 8日前から
+    final date = DateTime.now().subtract(const Duration(days: 7)); // 8日前から
 
     // サブクエリを使用して各日付の最新レコードのIDを取得
     final result = await db.rawQuery('''

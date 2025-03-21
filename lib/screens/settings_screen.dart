@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../services/database_helper.dart';
 
 class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
+
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
@@ -12,26 +14,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('設定')),
+      appBar: AppBar(title: const Text('設定')),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _categoryController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '新しいカテゴリ',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 ElevatedButton(
                   onPressed: _addCategory,
-                  child: Text('追加'),
+                  child: const Text('追加'),
                 ),
               ],
             ),
@@ -41,7 +43,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               future: DatabaseHelper.instance.getCategories(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 return ListView.builder(
@@ -50,7 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     return ListTile(
                       title: Text(snapshot.data![index]),
                       trailing: IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () => _deleteCategory(snapshot.data![index]),
                       ),
                     );
