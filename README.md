@@ -1,16 +1,43 @@
-# mood_recorder
+# 気分記録アプリ
 
-A new Flutter project.
+日々の気分を記録・可視化するためのFlutterアプリケーション。
 
-## Getting Started
+## 機能
 
-This project is a starting point for a Flutter application.
+- 気分を0-100のスケールで記録
+- 過去7日間の気分の推移をグラフで表示
+- 記録の一覧表示と編集
+- データはローカルで保存
 
-A few resources to get you started if this is your first Flutter project:
+## 必要要件
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter 3.0.0以上
+- Dart 2.17.0以上
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 使用パッケージ
+
+- fl_chart: グラフ表示用
+- sqflite: ローカルデータベース
+- intl: 日付フォーマット
+- path: データベースファイルのパス管理
+
+## セットアップ
+
+1. リポジトリをクローン
+2. 依存パッケージをインストール
+```bash
+flutter pub get
+```
+
+3. アプリを実行
+```bash
+flutter run
+```
+
+## 使い方
+
+1. 右下の「+」ボタンまたはメニューから「記録」を選択
+2. スライダーで気分を選択（0: 最悪 - 100: 最高）
+3. 保存ボタンをタップ
+4. トップ画面でグラフを確認
+5. 「記録一覧」から過去の記録を確認・編集可能
