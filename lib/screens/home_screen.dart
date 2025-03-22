@@ -107,6 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             reservedSize: 30,
                             interval: 1,
                             getTitlesWidget: (value, meta) {
+                              // 日付計算を修正：maxDateRangeから1を引く
                               final date = DateTime.now().subtract(
                                 Duration(days: (maxDateRange - value).toInt()),
                               );
@@ -137,11 +138,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       lineBarsData: [
                         LineChartBarData(
                           spots: records.map((record) {
-                            final daysAgo =
-                                DateTime.now().difference(record.date).inDays;
+                            final now = DateTime.now();
+                            // 日付を00:00:00に揃えて比較
+                            final today =
+                                DateTime(now.year, now.month, now.day);
+                            final recordDate = DateTime(
+                              record.date.year,
+                              record.date.month,
+                              record.date.day,
+                            );
+                            final daysAgo = today.difference(recordDate).inDays;
                             return FlSpot(
-                              maxDateRange -
-                                  daysAgo.toDouble(), // 7から引くことで右から左へ
+                              (maxDateRange - daysAgo).toDouble(),
                               record.mood.toDouble(),
                             );
                           }).toList(),
